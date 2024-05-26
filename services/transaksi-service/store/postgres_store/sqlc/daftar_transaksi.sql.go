@@ -11,22 +11,29 @@ import (
 
 const createTransaksi = `-- name: CreateTransaksi :one
 INSERT INTO daftar_transaksi (
+    id,
     jenis_transaksi,
     nominal,
     nomor_rekening
 ) VALUES (
-    $1, $2, $3
+    $1, $2, $3,$4
 ) RETURNING id, nomor_rekening, jenis_transaksi, nominal
 `
 
 type CreateTransaksiParams struct {
+	ID             string `json:"id"`
 	JenisTransaksi string `json:"jenis_transaksi"`
 	Nominal        int64  `json:"nominal"`
 	NomorRekening  string `json:"nomor_rekening"`
 }
 
 func (q *Queries) CreateTransaksi(ctx context.Context, arg CreateTransaksiParams) (DaftarTransaksi, error) {
-	row := q.db.QueryRowContext(ctx, createTransaksi, arg.JenisTransaksi, arg.Nominal, arg.NomorRekening)
+	row := q.db.QueryRowContext(ctx, createTransaksi,
+		arg.ID,
+		arg.JenisTransaksi,
+		arg.Nominal,
+		arg.NomorRekening,
+	)
 	var i DaftarTransaksi
 	err := row.Scan(
 		&i.ID,

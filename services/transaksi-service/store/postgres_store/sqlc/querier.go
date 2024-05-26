@@ -12,7 +12,7 @@ type Querier interface {
 	CreateTransaksi(ctx context.Context, arg CreateTransaksiParams) (DaftarTransaksi, error)
 	GetDaftarAkun(ctx context.Context, nomorRekening string) (DaftarAkun, error)
 	GetDaftarTransaksi(ctx context.Context, nomorRekening string) ([]DaftarAkun, error)
-	GetPelanggan(ctx context.Context, id int64) (DaftarPelanggan, error)
+	GetPelanggan(ctx context.Context, id string) (DaftarPelanggan, error)
 	UpdateSaldo(ctx context.Context, arg UpdateSaldoParams) (DaftarAkun, error)
 }
 

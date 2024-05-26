@@ -14,7 +14,7 @@ SELECT id, nama, nik, nomor_hp, pin FROM daftar_Pelanggan
 WHERE id = $1
 `
 
-func (q *Queries) GetPelanggan(ctx context.Context, id int64) (DaftarPelanggan, error) {
+func (q *Queries) GetPelanggan(ctx context.Context, id string) (DaftarPelanggan, error) {
 	row := q.db.QueryRowContext(ctx, getPelanggan, id)
 	var i DaftarPelanggan
 	err := row.Scan(

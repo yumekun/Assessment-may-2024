@@ -11,7 +11,7 @@ import (
 
 type TabungParams struct {
 	Nominal       int64  `json:"nominal"`
-	NomorRekening string `json:"no_rekening"`
+	NomorRekening string `json:"nomor_rekening"`
 }
 
 type TabungResult struct {

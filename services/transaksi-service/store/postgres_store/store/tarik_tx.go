@@ -6,6 +6,7 @@ import (
 	"transaksi-service/store/postgres_store/sqlc"
 	"transaksi-service/utils/errs"
 
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -56,6 +57,7 @@ func (store *PostgresStore) TarikTx(ctx context.Context, arg TarikTxParams) (Tar
 
 		// Create Transaksi
 		result.Transaksi, err = q.CreateTransaksi(ctx, sqlc.CreateTransaksiParams{
+			ID:             uuid.NewString(),
 			JenisTransaksi: "tarik",
 			Nominal:        -arg.Nominal,
 			NomorRekening:  arg.NomorRekening,

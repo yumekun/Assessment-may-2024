@@ -2,14 +2,14 @@ module transaksi-service
 
 go 1.22.1
 
-require github.com/sirupsen/logrus v1.9.3
+require (
+	github.com/google/uuid v1.6.0
+	github.com/sirupsen/logrus v1.9.3
+)
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect
-	github.com/cespare/xxhash/v2 v2.1.2 // indirect
-	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
-	github.com/google/uuid v1.5.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
@@ -38,7 +38,6 @@ require (
 )
 
 require (
-	github.com/go-redis/redis/v8 v8.11.5
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/lib/pq v1.10.9
 	github.com/pkg/errors v0.9.1

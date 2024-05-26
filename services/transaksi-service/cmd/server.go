@@ -87,8 +87,8 @@ func start() {
 		return c.SendString("PONG")
 	})
 
-	app.Post("/tabung", apiTransaksi.Deposit)
-	app.Post("/tarik", apiTransaksi.Penarikan)
+	app.Post("/tabung", apiTransaksi.Tabung)
+	app.Post("/tarik", apiTransaksi.Tarik)
 
 	// start the server
 	err = app.Listen(fmt.Sprintf("%s:%s", host, port))

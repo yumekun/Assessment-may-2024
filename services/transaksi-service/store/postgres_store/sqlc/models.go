@@ -9,14 +9,14 @@ import (
 )
 
 type DaftarAkun struct {
-	ID            sql.NullInt64 `json:"id"`
-	IDPelanggan   int64         `json:"id_pelanggan"`
-	NomorRekening string        `json:"nomor_rekening"`
-	Saldo         int64         `json:"saldo"`
+	ID            sql.NullString `json:"id"`
+	IDPelanggan   string         `json:"id_pelanggan"`
+	NomorRekening string         `json:"nomor_rekening"`
+	Saldo         int64          `json:"saldo"`
 }
 
 type DaftarPelanggan struct {
-	ID      int64  `json:"id"`
+	ID      string `json:"id"`
 	Nama    string `json:"nama"`
 	Nik     string `json:"nik"`
 	NomorHp string `json:"nomor_hp"`
@@ -24,14 +24,14 @@ type DaftarPelanggan struct {
 }
 
 type DaftarTransaksi struct {
-	ID             int64  `json:"id"`
+	ID             string `json:"id"`
 	NomorRekening  string `json:"nomor_rekening"`
 	JenisTransaksi string `json:"jenis_transaksi"`
 	Nominal        int64  `json:"nominal"`
 }
 
 type Mutasi struct {
-	ID             int64  `json:"id"`
+	ID             string `json:"id"`
 	NomorRekening  string `json:"nomor_rekening"`
 	JenisTransaksi string `json:"jenis_transaksi"`
 	Nominal        int64  `json:"nominal"`

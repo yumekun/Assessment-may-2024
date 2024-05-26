@@ -8,6 +8,7 @@ import (
 	"transaksi-service/store/postgres_store/sqlc"
 	"transaksi-service/utils/errs"
 
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -62,6 +63,7 @@ func (store *PostgresStore) TabungTx(ctx context.Context, arg TabungTxParams) (T
 
 		// create transaksi
 		result.Transaksi, err = q.CreateTransaksi(ctx, sqlc.CreateTransaksiParams{
+			ID:             uuid.NewString(),
 			JenisTransaksi: "tabung",
 			Nominal:        arg.Nominal,
 			NomorRekening:  arg.NomorRekening,

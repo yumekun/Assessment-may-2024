@@ -1,5 +1,5 @@
 CREATE TABLE "daftar_pelanggan" (
-  "id" bigserial PRIMARY KEY,
+  "id" varchar PRIMARY KEY,
   "nama" varchar NOT NULL,
   "nik" varchar UNIQUE NOT NULL,
   "nomor_hp" varchar UNIQUE NOT NULL,
@@ -7,23 +7,23 @@ CREATE TABLE "daftar_pelanggan" (
 );
 
 CREATE TABLE "daftar_akun" (
-  "id" bigserial,
-  "id_pelanggan" bigint NOT NULL,
+  "id" varchar,
+  "id_pelanggan" varchar NOT NULL,
   "nomor_rekening" varchar PRIMARY KEY,
   "saldo" bigint NOT NULL
 );
 
 CREATE TABLE "daftar_transaksi" (
-  "id" bigserial PRIMARY KEY,
+  "id" varchar PRIMARY KEY,
   "nomor_rekening" varchar NOT NULL,
-  "jenis_transaksi" varchar(1) NOT NULL,
+  "jenis_transaksi" varchar NOT NULL,
   "nominal" bigint NOT NULL
 );
 
 CREATE TABLE "mutasi" (
-  "id" bigserial PRIMARY KEY,
+  "id" varchar PRIMARY KEY,
   "nomor_rekening" varchar NOT NULL,
-  "jenis_transaksi" varchar(1) NOT NULL,
+  "jenis_transaksi" varchar NOT NULL,
   "nominal" bigint NOT NULL
 );
 
