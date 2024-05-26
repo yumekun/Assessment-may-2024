@@ -1,21 +1,20 @@
 package main
 
 import (
+	"context"
 	"database/sql"
-	"flag"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 
-	api_tansaksi "transaksi-service/api/api_transaksi"
-	transaksi "transaksi-service/service/transaksi"
-	postgres_store "transaksi-service/store/postgres_store/store"
-	"transaksi-service/store/redis_store"
-	"transaksi-service/utils/config"
-	"transaksi-service/utils/errs"
+	request_processor "mutasi-service/message_hub"
+	postgres_store "mutasi-service/store/postgres_store/store"
+	"mutasi-service/store/redis_store"
+	"mutasi-service/utils/config"
+	"mutasi-service/utils/errs"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
@@ -44,14 +43,6 @@ func start() {
 		os.Exit(1)
 	}
 
-	// read args
-	host := "0.0.0.0"
-	port := "3000"
-	if flag.NArg() >= 2 {
-		host = flag.Arg(1)
-		port = flag.Arg(2)
-	}
-
 	// create db connection
 	conn, err := sql.Open(config.PostgresDriver, config.PostgresUrl)
 	if err != nil {
@@ -63,6 +54,7 @@ func start() {
 
 		os.Exit(1)
 	}
+
 	// create redis client
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     config.RedisServiceAddress,
@@ -74,40 +66,23 @@ func start() {
 	postgresStore := postgres_store.NewPostgresStore(logger, conn)
 	redisStore := redis_store.NewRedisStore(logger, redisClient)
 
-	// init accountService layer
-	transaksiService := transaksi.NewService(config, logger, postgresStore, redisStore)
-
 	// init presentation layer
-	apiTransaksi := api_tansaksi.NewApi(transaksiService)
+	redisConsumer := request_processor.NewRequestProcessor(config, logger, postgresStore, redisStore)
 
-	// init fiber app
-	app := fiber.New()
+	// run request processor
+	go redisConsumer.Run(context.Background())
 
-	// CORS middleware configuration
-	corsConfig := cors.Config{
-		AllowOrigins: "http://0.0.0.0:3000",
-		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
-	}
+	// create error channel
+	errorChan := make(chan error)
+	go func() {
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, syscall.SIGINT, syscall.SIGTERM, syscall.SIGALRM)
+		errorChan <- fmt.Errorf("%s", <-c)
+	}()
 
-	app.Use(cors.New(corsConfig))
-
-	// endpoints
-	app.Get("/ping", func(c *fiber.Ctx) error {
-		return c.SendString("PONG")
-	})
-
-	app.Post("/tabung", apiTransaksi.Tabung)
-	app.Post("/tarik", apiTransaksi.Tarik)
-
-	// start the server
-	err = app.Listen(fmt.Sprintf("%s:%s", host, port))
-	if err != nil {
-		logger.WithFields(logrus.Fields{
-			"op":    op,
-			"scope": "Listen",
-			"err":   err.Error(),
-		}).Error(fmt.Sprintf("failed to listen at%s:%s", host, port))
-
-		os.Exit(1)
-	}
+	logger.WithFields(logrus.Fields{
+		"op":    op,
+		"scope": "Open",
+		"err":   (<-errorChan).Error(),
+	}).Error("failed to connect to the db!")
 }

@@ -9,6 +9,7 @@ import (
 	postgres_store "transaksi-service/store/postgres_store/store"
 	"transaksi-service/utils/errs"
 
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -47,6 +48,15 @@ func (service *Service) Tarik(ctx context.Context, params *TarikParams) (*TarikR
 	result, err := service.store.postgres.TarikTx(ctx, postgres_store.TarikTxParams{
 		Nominal:       params.Nominal,
 		NomorRekening: params.NomorRekening,
+	})
+	if err != nil {
+		return nil, err
+	}
+	err = service.store.redis.AddToStream(ctx, service.config.RedisMutasiRequestStream, map[string]interface{}{
+		"id":              uuid.NewString(),
+		"nomor_rekening":  params.NomorRekening,
+		"jenis_transaksi": result.Transaksi.JenisTransaksi,
+		"nominal":         -params.Nominal,
 	})
 	if err != nil {
 		return nil, err

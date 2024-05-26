@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 
-	"transaksi-service/utils/errs"
+	"mutasi-service/utils/errs"
 
 	"github.com/spf13/viper"
 )

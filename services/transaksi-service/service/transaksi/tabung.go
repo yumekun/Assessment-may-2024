@@ -6,6 +6,7 @@ import (
 	postgres_store "transaksi-service/store/postgres_store/store"
 	"transaksi-service/utils/errs"
 
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -31,6 +32,19 @@ func (service *Service) Tabung(ctx context.Context, params *TabungParams) (*Tabu
 	storeResult, err := service.store.postgres.TabungTx(ctx, postgres_store.TabungTxParams{
 		Nominal:       params.Nominal,
 		NomorRekening: params.NomorRekening,
+	})
+	if err != nil {
+		return nil, err
+	}
+	// ID             string `json:"id"`
+	// NomorRekening  string `json:"nomor_rekening"`
+	// JenisTransaksi string `json:"jenis_transaksi"`
+	// Nominal        int64  `json:"nominal"`
+	err = service.store.redis.AddToStream(ctx, service.config.RedisMutasiRequestStream, map[string]interface{}{
+		"id":              uuid.NewString(),
+		"nomor_rekening":  params.NomorRekening,
+		"jenis_transaksi": storeResult.Transaksi.JenisTransaksi,
+		"nominal":         params.Nominal,
 	})
 	if err != nil {
 		return nil, err
