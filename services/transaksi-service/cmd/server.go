@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"os"
 
+	"transaksi-service/api/api_auth"
 	api_tansaksi "transaksi-service/api/api_transaksi"
+	"transaksi-service/service/auth_service"
 	transaksi "transaksi-service/service/transaksi"
 	postgres_store "transaksi-service/store/postgres_store/store"
 	"transaksi-service/store/redis_store"
@@ -76,9 +78,11 @@ func start() {
 
 	// init accountService layer
 	transaksiService := transaksi.NewService(config, logger, postgresStore, redisStore)
+	authService := auth_service.NewService(config, logger, postgresStore)
 
 	// init presentation layer
 	apiTransaksi := api_tansaksi.NewApi(transaksiService)
+	apiAuth := api_auth.NewApi(authService)
 
 	// init fiber app
 	app := fiber.New()
@@ -96,8 +100,8 @@ func start() {
 		return c.SendString("PONG")
 	})
 
-	app.Post("/tabung", apiTransaksi.Tabung)
-	app.Post("/tarik", apiTransaksi.Tarik)
+	app.Post("/tabung", apiAuth.Tabung, apiTransaksi.Tabung)
+	app.Post("/tarik", apiAuth.Tarik, apiTransaksi.Tarik)
 
 	// start the server
 	err = app.Listen(fmt.Sprintf("%s:%s", host, port))
