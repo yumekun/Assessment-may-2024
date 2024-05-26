@@ -29,8 +29,13 @@ CREATE TABLE  "daftar_transaksi" (
 
 -- Create the mutasi table
 CREATE TABLE  "mutasi" (
-  "id" bigserial PRIMARY KEY,
+  "id" varchar PRIMARY KEY,
   "nomor_rekening" varchar(255) NOT NULL,
   "jenis_transaksi" varchar(255) NOT NULL,
   "nominal" bigint NOT NULL
 );
+
+INSERT INTO "public"."daftar_pelanggan" ("id","nama","nik","nomor_hp","pin") VALUES ('001','person A','nomor235','yeywiir','2301');
+INSERT INTO "public"."daftar_pelanggan" ("id","nama","nik","nomor_hp","pin") VALUES ('002','person B','nomor236','yeywieeew','1000');
+INSERT INTO "public"."daftar_akun" ("id","id_pelanggan","nomor_rekening","saldo") VALUES ('001','001','A001',500000);
+INSERT INTO "public"."daftar_akun" ("id","id_pelanggan","nomor_rekening","saldo") VALUES ('002','002','A002',300000);

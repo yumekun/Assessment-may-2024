@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"transaksi-service/store/postgres_store/sqlc"
 	"transaksi-service/utils/errs"
@@ -29,7 +30,7 @@ func (store *PostgresStore) TabungTx(ctx context.Context, arg TabungTxParams) (T
 
 	err := store.execTx(ctx, func(q *sqlc.Queries) error {
 		var err error
-
+		fmt.Print(arg.NomorRekening)
 		// get akun
 		akun, err := q.GetDaftarAkun(ctx, arg.NomorRekening)
 		if err != nil {

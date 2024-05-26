@@ -64,7 +64,7 @@ func (requestProcessor *RequestProcessor) consume(ctx context.Context) error {
 			if err != nil {
 				requestProcessor.logger.WithFields(logrus.Fields{
 					"op":    op,
-					"scope": "CreateJournal",
+					"scope": "CreateMutasi",
 					"err":   err.Error(),
 				}).Error("error!")
 

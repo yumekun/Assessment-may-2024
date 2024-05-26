@@ -20,7 +20,7 @@ type TabungResult struct {
 }
 
 func (service *Service) Tabung(ctx context.Context, params *TabungParams) (*TabungResult, error) {
-	const op errs.Op = "account_service/Tabung"
+	const op errs.Op = "transaksi_service/Tabung"
 
 	serviceResult := &TabungResult{}
 

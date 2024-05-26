@@ -73,22 +73,23 @@ func (service *Service) NewCreateMutasiParamsFromMap(mapParams map[string]interf
 
 	params, err := func(mapParams map[string]interface{}) (*CreateMutasiParams, error) {
 		params := &CreateMutasiParams{}
-
-		nomorRekening, ok := mapParams["no_rekening_debit"].(string)
+		id, ok := mapParams["id"].(string)
 		if !ok {
-			return nil, fmt.Errorf("`no_rekening_debit` as string, got type %T", mapParams["nomor_rekening"])
+			return nil, fmt.Errorf("`id` as string, got type %T", mapParams["id"])
+		}
+		params.ID = id
+
+		jenisTransaksi, ok := mapParams["jenis_transaksi"].(string)
+		if !ok {
+			return nil, fmt.Errorf("`jenis_transaksi` as string, got type %T", mapParams["jenis_transaksi"])
+		}
+		params.JenisTransaksi = jenisTransaksi
+
+		nomorRekening, ok := mapParams["nomor_rekening"].(string)
+		if !ok {
+			return nil, fmt.Errorf("`nomor_rekening` as string, got type %T", mapParams["nomor_rekening"])
 		}
 		params.NomorRekening = nomorRekening
-
-		nominalKreditString, ok := mapParams["nominal_kredit"].(string)
-		if !ok {
-			return nil, fmt.Errorf("`nominal_kredit` as string, got type %T", mapParams["nominal_kredit"])
-		}
-		nominalKredit, err := strconv.ParseInt(nominalKreditString, 10, 64)
-		if err != nil {
-			return nil, fmt.Errorf("failed to cast `nominal_kredit` as int64: %s", err.Error())
-		}
-		params.Nominal = int64(nominalKredit)
 
 		nominalString, ok := mapParams["nominal"].(string)
 		if !ok {
@@ -96,7 +97,7 @@ func (service *Service) NewCreateMutasiParamsFromMap(mapParams map[string]interf
 		}
 		nominal, err := strconv.ParseInt(nominalString, 10, 64)
 		if err != nil {
-			return nil, fmt.Errorf("failed to cast `nominal_debit` as int64: %s", err.Error())
+			return nil, fmt.Errorf("failed to cast `nominal` as int64: %s", err.Error())
 		}
 		params.Nominal = int64(nominal)
 
