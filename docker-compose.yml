@@ -23,7 +23,34 @@ services:
       - "6379:6379"
     networks:
       - assessment-may-2024
-  
+  transaksi-service:
+    build: ./services/transaksi-service
+    image: transaksi-service
+    container_name: transaksi-service
+    ports:
+      - "4000:4000"
+    restart: unless-stopped
+    env_file:
+      - ./services/transaksi-service/config.env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - assessment-may-2024
+
+  mutasi-service:
+    build: ./services/mutasi-service
+    image: mutasi-service
+    container_name: mutasi-service
+    restart: unless-stopped
+    env_file:
+      - ./services/mutasi-service/config.env
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - assessment-may-2024
+
 networks:
   assessment-may-2024:
     driver: bridge

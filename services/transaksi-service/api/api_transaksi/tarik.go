@@ -19,7 +19,7 @@ func (api *Api) Tarik(c *fiber.Ctx) error {
 	// call service layer
 	result, err := api.service.Tarik(context.Background(), params)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(map[string]interface{}{
+		return c.Status(fiber.StatusBadRequest).JSON(map[string]interface{}{
 			"remark": err.Error(),
 		})
 	}

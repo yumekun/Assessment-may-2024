@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"transaksi-service/store/postgres_store/sqlc"
 	"transaksi-service/utils/errs"
@@ -30,7 +29,7 @@ func (store *PostgresStore) TabungTx(ctx context.Context, arg TabungTxParams) (T
 
 	err := store.execTx(ctx, func(q *sqlc.Queries) error {
 		var err error
-		fmt.Print(arg.NomorRekening)
+
 		// get akun
 		akun, err := q.GetDaftarAkun(ctx, arg.NomorRekening)
 		if err != nil {
@@ -38,9 +37,10 @@ func (store *PostgresStore) TabungTx(ctx context.Context, arg TabungTxParams) (T
 				"op":    op,
 				"scope": "GetDaftarAkun",
 				"err":   err.Error(),
-			}).Error("error!")
+			}).Warning("error!")
 
 			if err == sql.ErrNoRows {
+
 				return errors.New("nomor rekening tidak dikenali")
 			}
 

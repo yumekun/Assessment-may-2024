@@ -27,11 +27,12 @@ func (service *Service) AutentikasiPin(ctx context.Context, params *AutentikasiP
 	service.logger.WithFields(logrus.Fields{
 		"op":     op,
 		"params": params,
-	}).Debug("params!")
+	}).Info("params!")
 
 	akun, err := service.store.postgres.GetDaftarAkun(ctx, params.NomorRekening)
 	if err != nil {
 		if err == sql.ErrNoRows {
+
 			return nil, errors.New("nomor rekening tidak dikenali")
 		}
 

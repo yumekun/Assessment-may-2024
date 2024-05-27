@@ -30,7 +30,7 @@ func (service *Service) Tarik(ctx context.Context, params *TarikParams) (*TarikR
 	service.logger.WithFields(logrus.Fields{
 		"op":     op,
 		"params": params,
-	}).Debug("params!")
+	}).Info("params!")
 
 	account, err := service.store.postgres.GetDaftarAkun(ctx, params.NomorRekening)
 	if err != nil {
