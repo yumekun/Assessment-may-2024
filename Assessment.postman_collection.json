@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "266da027-f483-4768-96cb-4b2c497c3526",
+		"name": "Assessment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31950572"
+	},
+	"item": [
+		{
+			"name": "tarik",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "2301",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nomor_rekening\":\"A001\",\n    \"nominal\":10000500000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/tarik",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"tarik"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tabung",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "2301",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nomor_rekening\":\"A001\",\n    \"nominal\":500000000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/tabung",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"tabung"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
